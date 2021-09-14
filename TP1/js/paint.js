@@ -17,7 +17,14 @@ let containerColores = document.getElementById("colores-container");
 
 let imagen = new Image();
 
-//Agrego evento del lapiz
+iniciarFiltros();
+activarColor();
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+//Asignacion de evento del lapiz
 lapiz.addEventListener("click", (e) => {
   lapiz.classList.toggle("active");
   containerColores.classList.toggle("active");
@@ -26,7 +33,7 @@ lapiz.addEventListener("click", (e) => {
   }
 });
 
-//Agrego evento de la goma
+//Asigancion de evento de la goma
 goma.addEventListener("click", (e) => {
   goma.classList.toggle("active");
   if (lapiz.classList.contains("active")) {
@@ -35,10 +42,9 @@ goma.addEventListener("click", (e) => {
   }
 });
 
-//init funciones
-activarColor();
-
-//Activar color
+/**
+ * Se agregan los eventos para activar el color para dibujar con el lapiz.
+ */
 function activarColor() {
   colores.forEach((color) => {
     color.addEventListener("click", (e) => {
@@ -48,6 +54,9 @@ function activarColor() {
   });
 }
 
+/**
+ * Se remueve la clase 'active' del color. 
+ */
 function desactivarColor() {
   colores.forEach((color) => {
     if (color.classList.contains("active")) {
@@ -56,6 +65,9 @@ function desactivarColor() {
   });
 }
 
+/**
+ * Se obtiene el color que se encuentra activo.
+ */
 function obtenerColorActivo() {
   let colorActivo = "negro";
   if (goma.classList.contains("active")) {
@@ -70,9 +82,9 @@ function obtenerColorActivo() {
   return colorActivo;
 }
 
-// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
-// Add the event listeners for mousedown, mousemove, and mouseup
-//evento cuando se presiona el mouse
+/**
+ * Capta el evento cuando se hace click para empezar a dibujar
+ */
 canvas.addEventListener("mousedown", (e) => {
   if (lapiz.classList.contains("active") || goma.classList.contains("active")) {
     x = e.offsetX;
@@ -81,16 +93,18 @@ canvas.addEventListener("mousedown", (e) => {
   }
 });
 
-//evento cuando se mueve el mouse
+/**
+ * Capta el evento del movimiento del mouse para dibujar de manera dinamica.
+ */
 canvas.addEventListener("mousemove", (e) => {
   if (isDrawing === true) {
     drawLine(e);
-    /* x = e.offsetX;
-    y = e.offsetY; */
   }
 });
 
-//evento cuando se suelta el mouse
+/**
+* Capta el evento cuando se deja de hacer click para dejar de dibujar
+*/
 canvas.addEventListener("mouseup", (e) => {
   if (isDrawing === true) {
     drawLine(e);
@@ -100,10 +114,13 @@ canvas.addEventListener("mouseup", (e) => {
   }
 });
 
+/**
+ * Obtiene el contexto y dibuja una linea teniendo en cuenta un punto inicial y un punto final.
+ */
 function drawLine(e) {
   ctx.beginPath();
-  ctx.strokeStyle = obtenerColorActivo(); //funcion para elegir el color
-  ctx.lineWidth = 2; //funcion para elegir grosor
+  ctx.strokeStyle = obtenerColorActivo(); 
+  ctx.lineWidth = 3; 
   ctx.moveTo(x, y);
   ctx.lineTo(e.offsetX, e.offsetY);
   ctx.stroke();
@@ -113,12 +130,15 @@ function drawLine(e) {
   y = e.offsetY;
 }
 
-// FUNCIONALIDAD SUBIR, DESCARGAR Y BORRAR LIENZO
+// FUNCIONALIDAD SUBIR, DESCARGAR Y BORRAR CANVAS
 let btnDescargarImg = document.getElementById("descargar");
 let btnSubirImg = document.getElementById("subirImagen");
 let seleccionarImagen = document.getElementById("seleccionarImagen");
 let borrarCanvas = document.getElementById("nuevoProyecto");
 
+/** 
+ * Captura de eventos al hacer en los botones para subir, descargar o borrar lienzo
+*/
 btnSubirImg.addEventListener("click", (e) => {
   seleccionarImagen.click();
 });
@@ -137,6 +157,9 @@ btnDescargarImg.addEventListener("click", (e) => {
   a.click();
 });
 
+/**
+ * Sube una imagen y renderiza en base a las dimensiones del canvas.
+ */
 function subirImagen(e) {
   imagen = new Image();
   let file = e.target.files[0]; // FileList object
@@ -154,50 +177,149 @@ function subirImagen(e) {
       imagen.width = (proporcionAjusteImg * imagen.width) / 100;
     }
 
-    dibujarImagen(imagen);
+    dibujarImagen(imagen,ctx);
+    cargarFiltros(imagen);
   };
 }
 
-function dibujarImagen(imagen) {
-  ctx.drawImage(imagen, 0, 0, imagen.width, imagen.height);
-}
 
 //FILTROS
+
+/**
+ * Agrega una imagen por defecto a los filtros.
+ */
+function iniciarFiltros() {
+ let imagen = new Image();
+ imagen.src = 'images/filtros.jpg';
+ imagen.onload = function(){
+   cargarFiltros(imagen);
+ }
+}
+
+/**
+ * Al cargar una imagen, renderiza en la seccion de filtros una vista previa con los filtros aplicados.
+ */
+function cargarFiltros(imagen) {  
+  let filtrosCanvas = document.querySelectorAll('.filtrosCanvas');
+  let canvasInicial = document.getElementById('inicial');
+  let imagenMiniatura = imagen;
+  let canvasHeight = canvasInicial.height;
+  let canvasWidth = canvasInicial.width;
+  imagenMiniatura.src = imagen.src;
+  imagenMiniatura.onload = function () {
+    if (imagenMiniatura.height > canvasHeight) {
+      let proporcionAjusteImg = (canvasHeight / imagenMiniatura.height) * 100;
+      imagenMiniatura.height = (proporcionAjusteImg * imagenMiniatura.height) / 100;
+      imagenMiniatura.width = (proporcionAjusteImg * imagenMiniatura.width) / 100;
+    }
+
+    if (imagenMiniatura.width > canvasWidth && imagenMiniatura.width > imagenMiniatura.height) {
+      let proporcionAjusteImg = (canvasWidth / imagenMiniatura.width) * 100;
+      imagenMiniatura.height = (proporcionAjusteImg * imagenMiniatura.height) / 100;
+      imagenMiniatura.width = (proporcionAjusteImg * imagenMiniatura.width) / 100;
+    }
+
+    filtrosCanvas.forEach(filtroCanvas => {
+      let filtro = filtroCanvas.id;
+      let contexto = filtroCanvas.getContext("2d");
+      contexto.clearRect(0, 0, canvasWidth, canvasHeight);
+      dibujarImagen(imagenMiniatura,contexto);
+      switch (filtro) {
+        case 'negativo': 
+        aplicarNegativo(contexto, canvasHeight, canvasWidth);
+        break;
+
+        case 'sepia': 
+        aplicarSepia(contexto, canvasHeight, canvasWidth);
+        break;
+
+        case 'binario': 
+        aplicarBinario(contexto, canvasHeight, canvasWidth);
+        break;
+
+        case 'brillo': 
+        aplicarBrillo(contexto, canvasHeight, canvasWidth);
+        break;
+
+        case 'escalaGrises': 
+        aplicarEscalaGrises(contexto, canvasHeight, canvasWidth);
+        break;
+
+        case 'blur': 
+        aplicarBlur(contexto, canvasHeight, canvasWidth);
+        break;
+
+        case 'deteccionBordes': 
+        aplicarDeteccionBordes(contexto, canvasHeight, canvasWidth);
+        break;
+      
+        default:
+          break;
+      }
+    });
+  };
+}
+
+/**
+ * Renderiza la imagen en el canvas.
+ */
+function dibujarImagen(imagen, contexto) {
+  contexto.drawImage(imagen, 0, 0, imagen.width, imagen.height);
+}
+
+//EVENTOS PARA CARGAR Y APLICAR FILTROS
 let btnFiltros = document.getElementById("filtros");
 let containerFiltros = document.getElementById("container-filtros");
+
 btnFiltros.addEventListener("click", (e) => {
+  btnFiltros.classList.toggle("active");
   containerFiltros.classList.toggle("active");
 });
 
-
-
 let inicial = document.getElementById("inicial");
-inicial.addEventListener("click", deshacerFiltro);
+inicial.addEventListener("click", e => {
+  deshacerFiltro(ctx, imagen);
+});
 
 let negativo = document.getElementById("negativo");
-negativo.addEventListener("click", aplicarNegativo);
+negativo.addEventListener("click", e => {
+  aplicarNegativo(ctx, canvasHeight, canvasWidth);
+});
 
 let sepia = document.getElementById("sepia");
-sepia.addEventListener("click", aplicarSepia);
+sepia.addEventListener("click", e => {
+  aplicarSepia(ctx, canvasHeight, canvasWidth);
+});
 
 let binario = document.getElementById("binario");
-binario.addEventListener("click", aplicarBinario);
+binario.addEventListener("click", e => {
+  aplicarBinario(ctx, canvasHeight, canvasWidth);
+});
 
 let brillo = document.getElementById("brillo");
-brillo.addEventListener("click", aplicarBrillo);
+brillo.addEventListener("click", e => {
+  aplicarBrillo(ctx, canvasHeight, canvasWidth);
+});
 
 let escalaGrises = document.getElementById("escalaGrises");
-escalaGrises.addEventListener("click", aplicarEscalaGrises);
+escalaGrises.addEventListener("click", e => {
+  aplicarEscalaGrises(ctx, canvasHeight, canvasWidth);
+});
 
 let blur = document.getElementById("blur");
-blur.addEventListener("click", aplicarBlur);
+blur.addEventListener("click", e => {
+  aplicarBlur(ctx, canvasHeight, canvasWidth);
+});
 
 let deteccionBordes = document.getElementById("deteccionBordes");
-deteccionBordes.addEventListener("click", aplicarDeteccionBordes);
+deteccionBordes.addEventListener("click", e => {
+  aplicarDeteccionBordes(ctx, canvasHeight, canvasWidth);
+});
 
 
-
-//SETEO DE PIXEL
+/**
+ * Alamacena los valores r, g, b y a del de un pixel 
+ */
 function setPixel(imageData, r, g, b, index) {
   imageData.data[index + 0] = r;
   imageData.data[index + 1] = g;
@@ -205,7 +327,9 @@ function setPixel(imageData, r, g, b, index) {
   imageData.data[index + 3] = 255;
 }
 
-//     esta bien esto??
+/**
+ * Obtiene los valores r,g,b y a de un pixel a partir de su coordenada x e y.
+ */
 function getPixel(imageData, x, y) {
   let index = (x + y * imageData.width) * 4;
   return {
@@ -216,16 +340,38 @@ function getPixel(imageData, x, y) {
   }
 }
 
-// DESHACER INICIAL
-function deshacerFiltro(){
-  dibujarImagen(imagen);
+/**
+ * Limpia los filtros aplicados a la imagen en el canvas
+ */
+function deshacerFiltro(ctx, img){
+  let imagen = new Image();
+  imagen.src = img.src
+  imagen.onload = function () {
+    if (imagen.height > canvasHeight) {
+      let proporcionAjusteImg = (canvasHeight / imagen.height) * 100;
+      imagen.height = (proporcionAjusteImg * imagen.height) / 100;
+      imagen.width = (proporcionAjusteImg * imagen.width) / 100;
+    }
+
+    if (imagen.width > canvasWidth && imagen.width > imagen.height) {
+      let proporcionAjusteImg = (canvasWidth / imagen.width) * 100;
+      imagen.height = (proporcionAjusteImg * imagen.height) / 100;
+      imagen.width = (proporcionAjusteImg * imagen.width) / 100;
+    }
+
+    dibujarImagen(imagen,ctx);
+    cargarFiltros(imagen); 
+  }
+  //dibujarImagen(imagen,ctx);
 }
 
-//FILTRO ESCALA DE GRISES
-function aplicarEscalaGrises(e) {
-  var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  for (let x = 0; x < canvasWidth; x++) {
-    for (let y = 0; y < canvasHeight; y++) {
+/**
+ * Aplica filtro escala de grises a un contexto (canvas) determinado.
+ */
+function aplicarEscalaGrises(contexto, heigth, width) {
+  var imageData = contexto.getImageData(0, 0, width, heigth);
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < heigth; y++) {
       let index = (x + y * imageData.width) * 4;
       let gris =
         (imageData.data[index + 0] +
@@ -239,14 +385,16 @@ function aplicarEscalaGrises(e) {
       setPixel(imageData, r, g, b, index);
     }
   }
-  ctx.putImageData(imageData, 0, 0);
+  contexto.putImageData(imageData, 0, 0);
 }
 
-//FILTRO BINARIZACION
-function aplicarBinario(e) {
-  var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  for (let x = 0; x < canvasWidth; x++) {
-    for (let y = 0; y < canvasHeight; y++) {
+/**
+ * Aplica filtro de binarizacion a un contexto (canvas) determinado.
+ */
+function aplicarBinario(contexto, heigth, width) {
+  var imageData = contexto.getImageData(0, 0, width, heigth);
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < heigth; y++) {
       let index = (x + y * imageData.width) * 4;
       let gris =
         (imageData.data[index + 0] +
@@ -260,14 +408,16 @@ function aplicarBinario(e) {
       setPixel(imageData, r, g, b, index);
     }
   }
-  ctx.putImageData(imageData, 0, 0);
+  contexto.putImageData(imageData, 0, 0);
 }
 
-//FILTRO NEGATIVO
-function aplicarNegativo(e) {
-  var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  for (let x = 0; x < canvasWidth; x++) {
-    for (let y = 0; y < canvasHeight; y++) {
+/**
+ * Aplica filtro negativo a un contexto (canvas) determinado.
+ */
+function aplicarNegativo(contexto, height, width) {
+  var imageData = contexto.getImageData(0, 0, width, height);
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
       let index = (x + y * imageData.width) * 4;
       let r = 255 - imageData.data[index + 0];
       let g = 255 - imageData.data[index + 1];
@@ -276,14 +426,16 @@ function aplicarNegativo(e) {
       setPixel(imageData, r, g, b, index);
     }
   }
-  ctx.putImageData(imageData, 0, 0);
+  contexto.putImageData(imageData, 0, 0);
 }
 
-//FILTRO SEPIA
-function aplicarSepia(e) {
-  var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  for (let x = 0; x < canvasWidth; x++) {
-    for (let y = 0; y < canvasHeight; y++) {
+/**
+ * Aplica filtro sepia a un contexto (canvas) determinado.
+ */
+function aplicarSepia(contexto, heigth, width) {
+  var imageData = contexto.getImageData(0, 0, width, heigth);
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < heigth; y++) {
       let index = (x + y * imageData.width) * 4;
 
       let r =
@@ -302,15 +454,17 @@ function aplicarSepia(e) {
       setPixel(imageData, r, g, b, index);
     }
   }
-  ctx.putImageData(imageData, 0, 0);
+  contexto.putImageData(imageData, 0, 0);
 }
 
 
-//FILTRO DE BRILLO
-function aplicarBrillo(e) {
-  var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  for (let x = 0; x < canvasWidth; x++) {
-    for (let y = 0; y < canvasHeight; y++) {
+/**
+ * Aplica filtro de brillo a un contexto (canvas) determinado.
+ */
+function aplicarBrillo(contexto, heigth, width) {
+  var imageData = contexto.getImageData(0, 0, width, heigth);
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < heigth; y++) {
       let index = (x + y * imageData.width) * 4;
       let rgb = {
         r: imageData.data[index + 0],
@@ -328,10 +482,12 @@ function aplicarBrillo(e) {
       setPixel(imageData, rgb.r, rgb.g, rgb.b, index);
     }
   }
-  ctx.putImageData(imageData, 0, 0);
+  contexto.putImageData(imageData, 0, 0);
 }
 
-//pasaja de RGB a HSL
+/**
+ * Realiza el pasaje de valores RGB a HSL 
+ */
 function rgbToHsl(r, g, b) {
   (r /= 255), (g /= 255), (b /= 255);
   var max = Math.max(r, g, b),
@@ -360,20 +516,22 @@ function rgbToHsl(r, g, b) {
   }
 
   return {
-    h: h,
-    s: s,
-    l: l,
+    'h': h,
+    's': s,
+    'l': l,
   };
 }
 
-//Pasaje de HSL a RGB
+/**
+ * Realiza el pasaje de valores HSL a RGB 
+ */
 function hslToRgb(h, s, l) {
-  var r, g, b;
+  let r, g, b;
 
   if (s == 0) {
     r = g = b = l; // achromatic
   } else {
-    var hue2rgb = function hue2rgb(p, q, t) {
+    let hue2rgb = function hue2rgb(p, q, t) {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -382,8 +540,8 @@ function hslToRgb(h, s, l) {
       return p;
     };
 
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
+    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    let p = 2 * l - q;
     r = hue2rgb(p, q, h + 1 / 3);
     g = hue2rgb(p, q, h);
     b = hue2rgb(p, q, h - 1 / 3);
@@ -396,31 +554,39 @@ function hslToRgb(h, s, l) {
   };
 }
 
-
-function aplicarBlur(e) {
-  let image = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+/**
+ * Aplica filtro Blur a un contexto (canvas) determinado. 
+ */
+function aplicarBlur(contexto, heigth, width) {
+  let image = contexto.getImageData(0, 0, width, heigth);
   let matriz = [[1,1,1],[1,1,1],[1,1,1]];
-  let imgData = matrizConvolucion(image, matriz);
-  ctx.putImageData(imgData, 0, 0);
+  let imgData = matrizConvolucion(image, matriz, contexto, heigth, width);
+  contexto.putImageData(imgData, 0, 0);
 }
 
 
-//FILTRO DETECCION DE BORDES
-function aplicarDeteccionBordes(e) {
+/**
+ * Aplica filtro de deteccion de bordes a un contexto (canvas) determinado. 
+ */
+function aplicarDeteccionBordes(contexto, heigth, width) {
   let matriz = [
                 [-4,0,4],
                 [-6,0,6],
                 [-4,0,4]
               ];
-  aplicarEscalaGrises();
-  let image = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  let imgData = matrizConvolucion(image, matriz);
-  ctx.putImageData(imgData, 0, 0);
+  aplicarEscalaGrises(contexto, heigth, width);
+  let image = contexto.getImageData(0, 0, width, heigth);
+  let imgData = matrizConvolucion(image, matriz,contexto, heigth, width);
+  contexto.putImageData(imgData, 0, 0);
 }
 
-
-function matrizConvolucion(imagen, matriz) {   
-  let imgRetorno = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+/**
+ * Lleva a cabo el procesamiento de la imagen original (matriz) a partir de otra matriz mas pequeña
+ * que al combinarlas da como resultado la transformacion de la imagen original (necesario para el blur 
+ * y deteccion de bordes)
+ */
+function matrizConvolucion(imagen, matriz, contexto, heigth, width) {   
+  let imgRetorno = contexto.getImageData(0, 0, width, heigth);
   
   let x = 0;
   let y = 0;
@@ -476,10 +642,3 @@ function matrizConvolucion(imagen, matriz) {
 
   return imgRetorno;
 }
-
-
-
-
-
-
-

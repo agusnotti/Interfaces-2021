@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>LOGO</h1>
+        </div>
+        <div class="menu-img">
+            <button id="subirImagen" href="#" data-toggle="tooltip" title="Subir Imagen"><i class="fas fa-upload"></i></button>
+            <form class="seleccionarImagen">
+                <input id="seleccionarImagen" type="file" accept="image/*" >
+            </form>
+            <button id="descargar" data-toggle="tooltip" title="Descargar Imagen"><i class="fas fa-download"></i></button>
+            <button id="nuevoProyecto" href="#" data-toggle="tooltip" title="Borrar Canvas"><i class="far fa-file"></i></button>        
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="herramientas col-1">
+            <div id="lapiz">
+                <button><i class="fas fa-pencil-alt"></i></button>
+            </div>
+            <div id="colores-container">
+                <div id="white" class="blanco colores"  data-toggle="tooltip" title="Blanco"></div>        
+                <div id="black" class="negro colores"  data-toggle="tooltip" title="Negro"></div>        
+                <div id="brown" class="marron colores"  data-toggle="tooltip" title="Marron"></div>        
+                <div id="red" class="rojo colores"  data-toggle="tooltip" title="Rojo"></div>            
+                <div id="orange" class="naranja colores"  data-toggle="tooltip" title="Naranja"></div>            
+                <div id="yellow" class="amarillo colores"  data-toggle="tooltip" title="Amarillo"></div>        
+                <div id="greenyellow" class="verde-claro colores"  data-toggle="tooltip" title="verde claro"></div> 
+                <div id="green" class="verde-oscuro colores"  data-toggle="tooltip" title="verde oscuro"></div>       
+                <div id="cyan" class="celeste colores"  data-toggle="tooltip" title="Celeste"></div>           
+                <div id="blue" class="azul colores"  data-toggle="tooltip" title="Azul"></div>        
+                <div id="pink" class="rosa colores"  data-toggle="tooltip" title="Rosa"></div>        
+                <div id="purple" class="violeta colores"  data-toggle="tooltip" title="Violeta"></div>            
+            </div>
+            <div id="goma">
+                <button><i class="fas fa-eraser"></i></button>
+            </div>
+            <div id="filtros">
+                <button><i class="fas fa-filter"></i></button>
+            </div>
+            <div id="container-filtros">
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Imagen Inicial">
+                    <canvas width="200" class="filtrosCanvas" id="inicial"></canvas>
+                </div>
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Negativo">
+                    <canvas width="200" class="filtrosCanvas" id="negativo"></canvas>
+                </div>
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Sepia">
+                    <canvas width="200" class="filtrosCanvas" id="sepia"></canvas>
+                </div>
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Binario">
+                    <canvas width="200" class="filtrosCanvas" id="binario"></canvas>
+                </div>
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Brillo">
+                    <canvas width="200" class="filtrosCanvas" id="brillo"></canvas>
+                </div>
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Escala de grises">
+                    <canvas width="200" class="filtrosCanvas" id="escalaGrises"></canvas>
+                </div>
+
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Blur">
+                    <canvas width="200" class="filtrosCanvas" id="blur"></canvas>
+                </div>
+            
+                <div class="col-md-12 filtros"  data-toggle="tooltip" title="Deteccion Bordes">
+                    <canvas width="200" class="filtrosCanvas" id="deteccionBordes"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-10"> 
+            <canvas height="500" width="900" id="canvas"></canvas>
+        </div>
+
+
+    </div>
+        
+
+
+
+
+
+</body>
+<script src="js/paint.js"></script>
+
+</html>

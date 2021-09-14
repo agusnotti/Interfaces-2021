@@ -1,0 +1,133 @@
+body{
+    background-color:#c5fb9c;
+}
+
+header{
+    display: flex;
+    border: solid 1px #16cf0a; 
+    background-color: white;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+canvas, #colores-container{
+    border: solid 1px #16cf0a; 
+    background-color: white;
+    box-shadow: 1px 1px 9px 6px #b7bd79;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+#colores-container{
+    display: none;
+    height: 200px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+#container-filtros{
+    display: none;
+}
+
+#colores-container.active, #container-filtros.active, .herramientas {
+    display: flex;
+}
+
+.herramientas, #container-filtros{
+    flex-direction: column;
+    align-items: center;
+}
+
+.herramientas > div{
+    margin: 10px;
+}
+
+button{
+    background: none;
+    border: none;
+}
+
+i{
+    font-size: 3rem;
+    color: black;
+}
+
+.active i{
+    color: #e3c892;
+}
+
+.colores{
+    height: 25px;
+    border: 1px solid black;
+    margin: 4px;
+    width: 30%;
+}
+
+/* .colores:hover, .colores.active{
+    box-shadow: 1px 1px 1px 1px black;
+    font-size: x-large;
+    cursor: pointer;
+} */
+
+.verde-claro{
+    background-color: #6bec2f;
+}
+
+.verde-oscuro{
+    background-color: #007213;
+}
+
+.rojo{
+    background-color: #f10202;
+}
+
+.amarillo{
+    background-color: #f1ef44;
+}
+
+.violeta{
+    background-color: #ca0cdb;
+}
+
+.azul{
+    background-color: #170acf ;
+}
+
+.celeste{
+    background-color: #0ee2e2;
+}
+
+.naranja{
+    background-color: #f35f1a;
+}
+
+.rosa{
+    background-color: #fc4fe5;
+}
+
+.negro{
+    background-color: #000000;
+}
+
+.marron{
+    background-color: #692803;
+}
+
+.blanco{
+    background-color: #ffffff;
+}
+
+
+.filtrosCanvas{
+    height: 60px;
+    margin-top: 10px;
+}
+
+/* SUBIR, DESCARGAR Y BORRAR IMAGEN */
+.seleccionarImagen{
+    display: none;
+}

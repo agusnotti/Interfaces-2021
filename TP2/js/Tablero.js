@@ -7,9 +7,10 @@ class Tablero{
         this.posYInicial = 100;
         this.ctx = ctx;
         this.tipoTablero = tipoTablero;
-	    this.columnas = tipoTablero.columnas;
-	    this.filas = tipoTablero.filas;
-        this.radio = tipoTablero.radio;
+	    this.columnas = this.tipoTablero.columnas;
+	    this.filas = this.tipoTablero.filas;
+        this.radio = this.tipoTablero.radio;
+        this.cantidadGanadora = this.tipoTablero.cantidadGanadora;
         this.anchoColumna = this.ancho/this.columnas;
         this.altoFila = this.alto/this.filas;
         this.ranuras = [];
@@ -72,4 +73,69 @@ class Tablero{
         }
         return puedeInsertarFicha;
     } 
+
+    hayGanador(nroJugador){
+        return this.comprobarVertical(nroJugador) || this.comprobarHorizontal(nroJugador) || this.comprobarDiagonal(nroJugador);
+    }
+
+    comprobarVertical(nroJugador){
+        for (let i = 0; i < this.columnas; i++) {
+            let contador = 0;
+            for (let j = 0; j < this.filas; j++) {
+                if(this.ranuras[i][j].getJugador()==nroJugador){
+                    contador++;
+                    if (contador == this.cantidadGanadora) {
+                        return true;
+                    }
+                } else {
+                    contador = 0;
+                }
+            }            
+        }
+        return false;
+    }
+    
+    comprobarHorizontal(nroJugador){
+        for (let j =  0; j < this.filas; j++) {
+            let contador = 0;
+            for (let i = 0; i < this.columnas; i++) {
+                if(this.ranuras[i][j].getJugador()==nroJugador){
+                    contador++;
+                    if (contador == this.cantidadGanadora) {
+                        return true;
+                    }
+                } else {
+                    contador = 0;
+                }
+            }            
+        }
+        return false;
+    }
+
+    comprobarDiagonal(nroJugador){
+        return this.comprobarDiagonalDerecha(nroJugador) || this.comprobarDiagonalIzquierda(nroJugador);
+    }
+
+    comprobarDiagonalDerecha(nroJugador){
+        for (let j =  0; j < this.filas; j++) {
+            for (let i = 0; i < this.columnas; i++) {
+                if(this.ranuras[i][j].getJugador()==nroJugador && j+this.cantidadGanadora < this.filas && i+this.cantidadGanadora < this.columnas){
+                    let contador = 0;
+                    for (let h = 0; h < this.cantidadGanadora; h++) {
+                        if(this.ranuras[i+h][j+h].getJugador()==nroJugador){
+                            contador++;
+                            if (contador == this.cantidadGanadora) {
+                                return true;
+                            }
+                        }
+                    }                    
+                }
+            }            
+        }
+        return false;
+    }
+
+    comprobarDiagonalIzquierda(nroJugador){
+
+    }
 }

@@ -45,39 +45,55 @@ class Juego {
   }
 
   insertarFicha(x,y) {
+    let fichaInsertada = false;
     if(this.turnoJugador == this.jugador1.getNroJugador()){
       let ficha = this.jugador1.getFichaActual();
       if(this.tablero.insertarFicha(x,y,ficha)){
         this.jugador1.desclickearFicha();    
         this.cantidadFichasJugadas++;
-        this.isJuegoTerminado();
-        this.setTurnoJugador();
+        fichaInsertada = true;
       } else {
         this.jugador1.reiniciarSeleccion();
       }
-      this.tablero.drawTablero();
-      this.jugador1.drawFichasJugador();
-      this.jugador2.drawFichasJugador();
     } else {
       let ficha = this.jugador2.getFichaActual();
       if(this.tablero.insertarFicha(x,y,ficha)){
         this.jugador2.desclickearFicha();    
         this.cantidadFichasJugadas++;
-        this.isJuegoTerminado();
-        this.setTurnoJugador();
+        fichaInsertada = true;
       } else {
         this.jugador2.reiniciarSeleccion();
       }
-      this.tablero.drawTablero();
-      this.jugador1.drawFichasJugador();
-      this.jugador2.drawFichasJugador();  
+    }
+    this.tablero.drawTablero();
+    this.jugador1.drawFichasJugador();
+    this.jugador2.drawFichasJugador();  
+
+    if(fichaInsertada){
+      setTimeout(() => {
+        if(!this.isJuegoTerminado()){
+          this.setTurnoJugador();
+        } else {
+          this.juegoTerminado = true;
+        }
+      }, 200);
     }
   }
 
   isJuegoTerminado(){
+    let juegoTerminado = false;
     if(this.hayEmpate()){
       alert('Empate');
+      juegoTerminado = true;
+    } else if (this.hayGanador()){
+      alert('Hay ganador');
+      juegoTerminado = true;
     }
+    return juegoTerminado;
+  }
+
+  hayGanador(){
+    return this.tablero.hayGanador(this.turnoJugador);
   }
 
   setTurnoJugador(){
@@ -89,7 +105,7 @@ class Juego {
   }
 
   hayEmpate(){
-    return this.tablero.cantidadFichas == this.cantidadFichasJugadas;
+    return this.tipoTablero.cantidadFichas == this.cantidadFichasJugadas;
   }
 
   obtenerMedidasTablero(juegoElegido) {
@@ -97,13 +113,21 @@ class Juego {
       columnas: 6,
       filas: 7,
       radio: 27,
+      cantidadGanadora: 4,
       cantidadFichas: 42
     };
+    /* let fourInLine = {
+      columnas: 3,
+      filas: 4,
+      radio: 27,
+      cantidadFichas: 12
+    }; */
 
     let fiveInLine = {
       columnas: 7,
       filas: 8,
       radio: 25,
+      cantidadGanadora: 5,
       cantidadFichas: 56
     };
 
@@ -111,6 +135,7 @@ class Juego {
       columnas: 8,
       filas: 9,
       radio: 23,
+      cantidadGanadora: 6,
       cantidadFichas: 72
     };
 

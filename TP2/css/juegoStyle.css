@@ -17,7 +17,3 @@ body{
 .turno-jugador{
     box-shadow: 4px 4px 4px 4px #ea9999;
 }
-
-.ocultar-timer{
-    visibility: hidden;
-}

@@ -146,11 +146,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	function initTimer() {
-		let minute = 1;
+		let minute = 3;
 		let sec = 0;
 		var interval = setInterval(function () {
 			if(!juego.isJuegoTerminado()){
-				document.getElementById("timer").classList.remove('ocultar-timer');
+				document.getElementById("timer").classList.remove('oculto');
 				let secInfo = (sec < 10) ? '0'+sec : sec;
 				let minuteInfo = (minute < 10) ? '0'+minute : minute;
 				document.getElementById("timer").innerHTML = minuteInfo + " : " + secInfo;			
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				if(sec < 0 && minute == 0){
 					juego.stopJuego();
 					clearInterval(interval);
-					document.getElementById("timer").classList.add('ocultar-timer')
+					document.getElementById("timer").classList.add('oculto')
 					document.getElementById("timeout-mensaje").classList.remove('oculto');
 					document.getElementById("reiniciar-juego").classList.remove('oculto');
 					document.getElementById("cambiar-tablero").classList.remove('oculto');

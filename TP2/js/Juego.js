@@ -5,6 +5,8 @@ class Juego {
     this.jugador2 = new Jugador(ctx,jugador2,2,this.tipoTablero,colorJ2);
     this.tablero = new Tablero(ctx, this.tipoTablero, fichasTablero);
     this.turnoJugador = 1;
+    document.getElementById('nombre-jugador1-box').classList.add('turno-jugador');
+    document.getElementById('nombre-jugador2-box').classList.remove('turno-jugador');
     this.cantidadFichasJugadas = 0;
     this.juegoTerminado = false;
     this.tablero.drawTablero();
@@ -74,7 +76,10 @@ class Juego {
         if(!this.isJuegoTerminado()){
           this.setTurnoJugador();
         } else {
-          this.juegoTerminado = true;
+          this.juegoTerminado = true;          
+          document.getElementById("timer").classList.add('oculto');
+          document.getElementById("reiniciar-juego").classList.remove('oculto');
+          document.getElementById("cambiar-tablero").classList.remove('oculto');
         }
       }, 200);
     }
@@ -83,10 +88,17 @@ class Juego {
   isJuegoTerminado(){
     let juegoTerminado = false;
     if(this.hayEmpate()){
-      alert('Empate');
+      document.getElementById("empate-mensaje").classList.remove('oculto');
       juegoTerminado = true;
     } else if (this.hayGanador()){
-      alert('Hay ganador');
+      let ganador = null;
+      if(this.turnoJugador == 1){
+        ganador = this.jugador1.getNombre();
+      } else{
+        ganador = this.jugador2.getNombre();
+      }
+      document.getElementById("nombre-ganador").innerHTML = ganador;
+      document.getElementById("ganador-mensaje").classList.remove('oculto');
       juegoTerminado = true;
     }
     return juegoTerminado;
@@ -96,12 +108,18 @@ class Juego {
     return this.tablero.hayGanador(this.turnoJugador);
   }
 
+  stopJuego(){
+    this.juegoTerminado = true;
+  }
+
   setTurnoJugador(){
     if(this.turnoJugador == 1){
       this.turnoJugador = 2;
     } else {
       this.turnoJugador = 1;
     }
+    document.getElementById('nombre-jugador1-box').classList.toggle('turno-jugador');
+    document.getElementById('nombre-jugador2-box').classList.toggle('turno-jugador');
   }
 
   hayEmpate(){
@@ -116,13 +134,7 @@ class Juego {
       cantidadGanadora: 4,
       cantidadFichas: 42
     };
-    /* let fourInLine = {
-      columnas: 3,
-      filas: 4,
-      radio: 27,
-      cantidadFichas: 12
-    }; */
-
+    
     let fiveInLine = {
       columnas: 7,
       filas: 8,

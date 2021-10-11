@@ -13,32 +13,98 @@
 
 <body>
 
-    <div class="container">
-        
-        <div>
-            <select name="juego" id="juego">
-                <option value="fourInLine">4 en linea</option>
-                <option value="fiveInLine">5 en linea</option>
-                <option value="sixInLine">6 en linea</option>
-            </select>
-            <select name="color-ficha" id="color-ficha">
-                <option value="rojo">Rojo</option>
-                <option value="violeta">Violeta</option>
-                <option value="verde">Verde</option>
-                <option value="azul">Azul</option>
-                <option value="negro">Negro</option>
-                <option value="naranja">Naranja</option>
-                <option value="amarillo">Amarillo</option>
-            </select>
-            <div>
-                <button id="iniciar-juego">Iniciar Juego</button>
+    <div class="container">        
+        <div class="row">
+            <div class="col-md-2 offset-md-5">
+                <div id="timer" class="alert alert-primary ocultar-timer text-center font-weight-bold h4" role="alert">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="btns-reiniciar-juego">
+                    <button id="reiniciar-juego" class="btn btn-warning oculto">Reiniciar Juego</button>
+                    <button id="cambiar-tablero" class="btn btn-info oculto">Cambiar Tablero</button>
+                </div>
             </div>
         </div>
+        
+        <div id='home'>
+            <h1 class="col-md-8">X en linea</h1>
+            <div class="form-group row">
+                <label for="jugador1" class="col-md-2 col-form-label">Jugador 1</label>
+                <div class="col-md-5">
+                    <input type="text" class="form-control" id="jugador1" value="Jugador 1">
+                </div>
+                <div class="col-md-5">
+                    <select name="color-ficha" id="color-ficha-j1" class="form-control">
+                        <option value="rojo">Rojo</option>
+                        <option value="violeta">Violeta</option>
+                        <option value="verde">Verde</option>
+                        <option value="azul">Azul</option>
+                        <option value="negro">Negro</option>
+                        <option value="naranja">Naranja</option>
+                        <option value="amarillo">Amarillo</option>
+                    </select>
+                </div>
+            </div>
     
-        <div class="row">
+            <div class="form-group row">
+                <label for="jugador2" class="col-md-2 col-form-label">Jugador 2</label>
+                <div class="col-md-5">
+                    <input type="text" class="form-control" id="jugador2" value="Jugador 2">
+                </div>
+                <div class="col-md-5">
+                    <select name="color-ficha" id="color-ficha-j2" class="form-control">
+                        <option value="rojo">Rojo</option>
+                        <option value="violeta" selected>Violeta</option>
+                        <option value="verde">Verde</option>
+                        <option value="azul">Azul</option>
+                        <option value="negro">Negro</option>
+                        <option value="naranja">Naranja</option>
+                        <option value="amarillo">Amarillo</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-group row">
+                <label for="juego" class="col-md-2 col-form-label">Seleccione el juego</label>
+                <select name="juego" id="juego" class="col-md-4 form-control">
+                    <option value="fourInLine">4 en linea</option>
+                    <option value="fiveInLine">5 en linea</option>
+                    <option value="sixInLine">6 en linea</option>
+                </select>
+                <div class="col-md-2">
+                    <button id="iniciar-juego" class="btn btn-warning">Iniciar Juego</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="mensaje-color-igual" class="row alert alert-warning oculto">
+            <h1>Se deben seleccionar colores diferentes</h1>
+        </div>
+
+        <div id="ganador-mensaje" class="row alert alert-success oculto">
+            <h1>Ganador: <span id="nombre-ganador"></span></h1>
+        </div>
+        <div id="empate-mensaje" class="row alert alert-warning oculto">
+            <h1>Hay Empate</h1>
+        </div>
+        <div id="timeout-mensaje" class="row alert alert-secondary oculto">
+            <h1>Time Out!</h1>
+        </div>
+
+        <div class="row oculto" id="canvas-container">
+            <div class="col-md-3 box-jugador" id="nombre-jugador1-box">
+                <h1 id="nombre-jugador1"></h1>
+            </div>
+            <div class="offset-md-6 col-md-3 box-jugador" id="nombre-jugador2-box">
+                <h1 id="nombre-jugador2"></h1>
+            </div>
             <div>
                 <canvas height="600" width="1100" id="canvas"></canvas>
-            </div>    
+            </div>  
+            
+              
         </div>
     </div>
 

@@ -6,7 +6,19 @@ document.addEventListener("DOMContentLoaded", function () {
     /* let canvasWidth = canvas.width;
     let canvasHeigth = canvas.height; */
 	let juego;
-
+	let inputJugador1 = document.getElementById('jugador1');
+	let inputJugador2 = document.getElementById('jugador2');
+	let nombreJugador1 = document.getElementById('nombre-jugador1');
+	let nombreJugador2 = document.getElementById('nombre-jugador2');
+	let colorFichaJ1 = document.getElementById('color-ficha-j1');
+	let colorFichaJ2 = document.getElementById('color-ficha-j2');
+	
+	let canvasContainer = document.getElementById('canvas-container');
+	let homeContainer = document.getElementById('home');
+	let btnIniciarJuego = document.getElementById('iniciar-juego');
+	let btnReiniciarJuego = document.getElementById('reiniciar-juego');
+	let btnCambiarModo = document.getElementById('cambiar-tablero');
+	
 	let imagenAmarillo = new Image();
 	imagenAmarillo.src ='img/amarillo.png';
 	let imagenAzul = new Image();
@@ -24,25 +36,67 @@ document.addEventListener("DOMContentLoaded", function () {
 	let imagenGris = new Image();
 	imagenGris.src ='img/gris.png';
 
-	let btnIniciarJuego = document.getElementById('iniciar-juego');
+
+
 	btnIniciarJuego.addEventListener('click', () => {
+		if(colorFichaJ1.value == colorFichaJ2.value) {
+			document.getElementById('mensaje-color-igual').classList.remove('oculto');
+		} else {
+			document.getElementById('mensaje-color-igual').classList.add('oculto');
+
+			canvasContainer.classList.remove('oculto');
+			homeContainer.classList.add('oculto');
+			nombreJugador1.innerHTML = inputJugador1.value;
+			nombreJugador2.innerHTML = inputJugador2.value;
+
+			iniciarJuego();
+		}
+		
+	})
+
+	btnReiniciarJuego.addEventListener('click', () => {
+		canvasContainer.classList.remove('oculto');
+		homeContainer.classList.add('oculto');
+		nombreJugador1.innerHTML = inputJugador1.value;
+		nombreJugador2.innerHTML = inputJugador2.value;
+
+		document.getElementById('reiniciar-juego').classList.add('oculto');
+		document.getElementById("cambiar-tablero").classList.add('oculto');
+		document.getElementById('ganador-mensaje').classList.add('oculto');
+		document.getElementById('empate-mensaje').classList.add('oculto');
+		document.getElementById('timeout-mensaje').classList.add('oculto');
+
+		iniciarJuego();
+	})
+
+	btnCambiarModo.addEventListener('click', () => {
+		canvasContainer.classList.add('oculto');
+		homeContainer.classList.remove('oculto');
+
+		document.getElementById('reiniciar-juego').classList.add('oculto');
+		document.getElementById("cambiar-tablero").classList.add('oculto');
+		document.getElementById('ganador-mensaje').classList.add('oculto');
+		document.getElementById('empate-mensaje').classList.add('oculto');
+		document.getElementById('timeout-mensaje').classList.add('oculto');
+	})
+
+	function iniciarJuego(){
 		let juegoElegido = document.getElementById('juego').value;
-		//agregar funcionalidad para seleccionar color
-		//let colorSeleccionadoJ1 = document.getElementById('colorJ1');
-		let colorSeleccionadoJ1 = 'rojo';
-		let colorSeleccionadoJ2 = 'verde';
+		let colorSeleccionadoJ1 = colorFichaJ1.value;
+		let colorSeleccionadoJ2 = colorFichaJ2.value;
 
 		let fichasTablero = getColor('gris');
 		let colorJ1 = getColor(colorSeleccionadoJ1)
 		let colorJ2 = getColor(colorSeleccionadoJ2);
-		let jugador1 = "Agustin"; //agarrar del formulario
-    	let jugador2 = "Agustina"; //agarrar del formulario
+		let jugador1 = inputJugador1.value; //agarrar del formulario
+    	let jugador2 = inputJugador2.value; //agarrar del formulario
 		juego = new Juego(ctx,juegoElegido,jugador1,jugador2,colorJ1,colorJ2, fichasTablero);
 		juego.play();
 
+		initTimer();
 		
 		initEvents();
-	})
+	}
 
 	function getColor(color) {
 		switch (color) {
@@ -74,16 +128,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 	function onMouseDown(e){
-		/* let x = e.layerX - e.currentTarget.offsetLeft;
-		let y = e.layerY - e.currentTarget.offsetTop; */            
-		
 		juego.buscarFichaClickeada(e.layerX, e.layerY);
 	}
 
 	function onMouseMove(e){
-		/* let x = e.layerX - e.currentTarget.offsetLeft;
-		let y = e.layerY - e.currentTarget.offsetTop; */   
-
 		if(juego.hayFichaClickeada()){
 			juego.moveFicha(e.layerX, e.layerY);
 		}
@@ -96,10 +144,42 @@ document.addEventListener("DOMContentLoaded", function () {
 			juego.insertarFicha(x,y);    
 		}
 	}
+
+	function initTimer() {
+		let minute = 1;
+		let sec = 0;
+		var interval = setInterval(function () {
+			if(!juego.isJuegoTerminado()){
+				document.getElementById("timer").classList.remove('ocultar-timer');
+				let secInfo = (sec < 10) ? '0'+sec : sec;
+				let minuteInfo = (minute < 10) ? '0'+minute : minute;
+				document.getElementById("timer").innerHTML = minuteInfo + " : " + secInfo;			
+				sec--;
+				if(sec < 0 && minute == 0){
+					juego.stopJuego();
+					clearInterval(interval);
+					document.getElementById("timer").classList.add('ocultar-timer')
+					document.getElementById("timeout-mensaje").classList.remove('oculto');
+					document.getElementById("reiniciar-juego").classList.remove('oculto');
+					document.getElementById("cambiar-tablero").classList.remove('oculto');
+				} else {
+					if(sec < 0){
+						minute--;
+						sec = 59;
+					}
+				}
+
+			} else {
+				clearInterval(interval);
+			}
+		}, 1000);
+	}
 });
+
+
 /**
  * 
- 4 en linea
+ X en linea
 
 OBJETOS:
 - Tablero

@@ -39,6 +39,10 @@ class Jugador{
         return this.nroJugador;
     }
 
+    getNombre(){
+        return this.nombre;
+    }
+
     obtenerPosicionTableroFichas(){
         let nroJugador = this.getNroJugador();
         let tableroFichas;

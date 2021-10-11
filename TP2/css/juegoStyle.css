@@ -3,3 +3,21 @@
 body{
     background-color:#f3f6f4;
 }
+
+.oculto{
+    display: none;
+}
+
+.box-jugador{
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.turno-jugador{
+    box-shadow: 4px 4px 4px 4px #ea9999;
+}
+
+.ocultar-timer{
+    visibility: hidden;
+}

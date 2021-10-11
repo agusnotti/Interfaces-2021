@@ -119,10 +119,10 @@ class Tablero{
     comprobarDiagonalDerecha(nroJugador){
         for (let j =  0; j < this.filas; j++) {
             for (let i = 0; i < this.columnas; i++) {
-                if(this.ranuras[i][j].getJugador()==nroJugador && j+this.cantidadGanadora < this.filas && i+this.cantidadGanadora < this.columnas){
+                if(this.ranuras[i][j].getJugador()==nroJugador && j-this.cantidadGanadora >= 0 && i+this.cantidadGanadora <= this.columnas){
                     let contador = 0;
                     for (let h = 0; h < this.cantidadGanadora; h++) {
-                        if(this.ranuras[i+h][j+h].getJugador()==nroJugador){
+                        if(this.ranuras[i+h][j-h].getJugador()==nroJugador){
                             contador++;
                             if (contador == this.cantidadGanadora) {
                                 return true;
@@ -136,6 +136,21 @@ class Tablero{
     }
 
     comprobarDiagonalIzquierda(nroJugador){
-
+        for (let j =  0; j < this.filas; j++) {
+            for (let i = 0; i < this.columnas; i++) {
+                if(this.ranuras[i][j].getJugador()==nroJugador && j+this.cantidadGanadora <= this.filas && i+this.cantidadGanadora <= this.columnas){
+                    let contador = 0;
+                    for (let h = 0; h < this.cantidadGanadora; h++) {
+                        if(this.ranuras[i+h][j+h].getJugador()==nroJugador){
+                            contador++;
+                            if (contador == this.cantidadGanadora) {
+                                return true;
+                            }
+                        }
+                    }                    
+                }
+            }            
+        }
+        return false;
     }
 }

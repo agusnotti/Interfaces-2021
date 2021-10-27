@@ -3,6 +3,7 @@ class Avatar {
     constructor(posX, posY){
         this.avatar = document.createElement('div');
         this.avatar.id = "avatar";
+        this.avatar.classList.add('jugando');
         this.background = document.getElementById('parallax-background');
         this.background.append(this.avatar);
         this.posX = posX;
@@ -39,8 +40,8 @@ class Avatar {
         let avatar = document.getElementById('avatar');
         avatar.style.left = this.posX+'px';
         avatar.style.bottom = this.posY+'px';
-        //console.log(this.posX);
-       // console.log(this.posY);
+        console.log(this.posX);
+        console.log(this.posY);
     }
 
     getAvatar(){
@@ -49,7 +50,7 @@ class Avatar {
 
     getPosicionAvatar(){
         return {
-            'posX': this.posX,
+            'posX': this.getAvatar().getBoundingClientRect().x,
             'posY': this.posY 
         };
     }

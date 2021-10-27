@@ -12,6 +12,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
      let juego = new Juego()
 
+     
 
      /*juego.jugar(); */
 

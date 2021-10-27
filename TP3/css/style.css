@@ -10,6 +10,7 @@
     background-size: cover;
     animation: parallax-background linear 20s infinite;
     position: absolute;
+    overflow: hidden;
 }
 
 @keyframes parallax-background {
@@ -19,18 +20,48 @@
 
 /* PEZ */
 #avatar{
-    background-image: url(../images/swin.png);
     position: absolute;
-    width: 128px;
-    height: 128px;
+    z-index: 2;
     /* bottom: 150px;
     left: 200px; */
-    animation: walk steps(6) 2s infinite;
 }
 
-@keyframes walk{
+.jugando {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/swin.png);
+    animation: pez steps(6) 2s infinite;
+}
+
+@keyframes pez{
     0% {background-position-x: 0px;}
     100% {background-position-x: 768px;}
+}
+
+.muerte{
+    background-image: url(../images/bubles2.png);
+    width: 126px;
+    height: 103px;
+    /* bottom: 200px;
+    left: 500px;  */
+    animation: muerte steps(7) 1s 1;
+}
+
+@keyframes muerte{
+    0% {background-position-x: 0px;}
+    100% {
+        background-position-x: -898px;
+        display: none;
+    }    
+}
+
+@keyframes desaparecer{
+    0%{
+        transition: opacity 0.3s linear 2s;
+    }
+    100% {
+        transform: opacity 0.3s linear 2s;
+    }
 }
 
 /* OBSTACULOS */
@@ -56,7 +87,7 @@
     height: 125px;
     /* bottom: 400px;
     left: 600px; */
-    animation: tiburon steps(7) 1s infinite;
+    animation: tiburon steps(7) 1s infinite, moverObjeto linear 6s 1;
 }
 
 @keyframes tiburon{
@@ -71,7 +102,7 @@
     height: 130px;
     /* bottom: 200px;
     left: 800px */;
-    animation: aguaviva steps(5) 2s infinite;
+    animation: aguaviva steps(5) 2s infinite, moverObjeto linear 6s 1;
 }
 
 @keyframes aguaviva{
@@ -80,14 +111,14 @@
 }
 
 /* objeto para sumar puntos*/
-#ostra{
+.ostra{
     background-image: url(../images/puntos2.png);
     position: absolute;
     width: 50px;
     height: 50px;
-    bottom: 400px;
-    left: 1000px;
-    animation: latir linear 2s infinite;
+    /* bottom: 400px;
+    left: 1000px; */
+    animation: latir linear 2s infinite, moverObjeto linear 6s 1;
 }
 
 @keyframes latir{
@@ -95,5 +126,16 @@
     50% {transform: scale(1);}
     100% {transform: scale(0.7);}
     
+}
+
+.puntaje{
+    display: flex;
+}
+
+
+@keyframes moverObjeto{
+    100%{
+        transform: translate(-1400px, 10px);
+    }
 }
 

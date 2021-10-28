@@ -7,18 +7,33 @@ class Juego{
         this.limiteDerecho = window.screen.width-160;
         this.limiteSuperior = window.screen.height-330;
         this.limiteInferior = 50;
-        this.jugando = false;   
+        this.jugando = true;   
         this.objetos = []; 
         this.intervalosObjetos = [];
         this.puntos = 0;  
         this.contadorObjetosCreados = 0; 
+        this.timerFinalizado = false;
 
         this.acciones = ['ArrowDown','ArrowUp','ArrowLeft','ArrowRight'];
         this.accionActual = '';
         
+        this.iniciarJuego();
+        
+    }
+
+    estaJugando(){
+        return this.jugando;
+    }
+
+
+    iniciarJuego(){ 
+        let fondo = document.getElementById('parallax-background');
+        fondo.classList.add('animacion-fondo'); 
+        this.puntaje.innerHTML = this.getPuntos();
         this.initEventos(this);
         this.crearObjetos();
         this.verificarColision();
+        this.initTimer();
     }
 
     getPuntos(){
@@ -32,7 +47,6 @@ class Juego{
             ctxJuego.moverAvatar();
         });
 
-        this.jugando = true;
     }
 
     moverAvatar(){
@@ -43,7 +57,6 @@ class Juego{
 
     puedeMover(){
         let posicion = this.avatarJugador.getPosicionAvatar();
-        let movimiento = this.avatarJugador.getMovimiento();
         let puedeMover = true;
         if ((this.accionActual == 'ArrowLeft' && posicion.posX < this.limiteIzquierdo)||
             (this.accionActual == 'ArrowRight' && posicion.posX > this.limiteDerecho)||
@@ -57,13 +70,13 @@ class Juego{
     }
 
     crearObjetos(){
-        // let objetoTiburon = new Objeto(600,400,'tiburon');
-        // let objetoAguaviva = new Objeto(800,200,'aguaviva');
-        // let objetoOstra = new Objeto(1000,400,'ostra');
-        // //agregar ostra
-        // this.objetos.push(objetoTiburon);
-        // this.objetos.push(objetoAguaviva);
-        // this.objetos.push(objetoOstra);
+        /* let objetoTiburon = new Objeto(600,400,'tiburon');
+        let objetoAguaviva = new Objeto(800,200,'aguaviva');
+        let objetoOstra = new Objeto(1000,400,'ostra');
+
+        this.objetos.push(objetoTiburon);
+        this.objetos.push(objetoAguaviva);
+        this.objetos.push(objetoOstra); */
 
         let creacionObjeto = setInterval(() => {
             if(this.jugando){
@@ -72,45 +85,95 @@ class Juego{
             } else {
                 clearInterval(creacionObjeto); 
             }
-        }, 1500);  
+        }, 2000);  
+    }
+
+    eliminarObjeto(idObjeto){
+        this.intervalosObjetos[idObjeto] = setInterval(() => {
+            let objeto = this.objetos[idObjeto];
+            if(objeto) {
+                objeto.getObjeto().remove();
+                delete this.objetos[idObjeto];
+            }
+            clearInterval(this.intervalosObjetos[idObjeto]);
+        },8000);
+    }
+
+    crearObjeto(){
+        let objetos = ['tiburon','aguaviva','ostra'];
+        let nombre = objetos[Math.floor(Math.random() * objetos.length)];
+        let posicionY = Math.random() * (this.limiteSuperior - this.limiteInferior) + this.limiteInferior;
+        let nuevoObjeto = new Objeto(this.limiteDerecho + 200,posicionY,nombre);
+
+        let clase = "movimiento-"+nombre;
+        let divObjeto = nuevoObjeto.getObjeto()
+        divObjeto.classList.add(clase);
+
+        let id = 'objeto' + this.contadorObjetosCreados;
+        this.contadorObjetosCreados++;
+        this.objetos[id] = nuevoObjeto; 
+        
+        return id;
     }
 
     verificarColision(){ 
         let intervaloColision = setInterval(() => {
-            //let avatar = this.avatarJugador;
-            for (let idObjeto in this.objetos) {
-                var objeto = this.objetos[idObjeto];
-                let hayColision = this.hayColision(this.avatarJugador,objeto);
-                if(hayColision){
-                    console.log('hay colision con '+objeto.getNombre());
-                    if(objeto.getNombre() == 'ostra'){
-                        console.log('suma puntos');
-                        this.incrementarPuntos();
-                        this.puntaje.innerHTML = this.getPuntos();
-                        console.log(this.puntaje);
-                    } else {
-                        this.finalizaJuegoXColision(intervaloColision);
-                        
+            if(!this.timerFinalizado) { // si no termino el timer
+                for (let idObjeto in this.objetos) {
+                    let objeto = this.objetos[idObjeto];
+                    let hayColision = this.hayColision(this.avatarJugador,objeto);
+                    if(hayColision){
+                        console.log('hay colision con '+objeto.getNombre());
+                        if(objeto.getNombre() == 'ostra'){
+    
+                            console.log('suma puntos');
+                            this.incrementarPuntos(objeto);
+                            
+                            console.log(this.puntaje);
+                        } else {
+                            
+                            this.finalizaJuegoXColision(intervaloColision);
+                        }
                     }
                 }
+            } else {
+                //termino timer
+                //finaliza juego por que gano
             }
            
         }, 1000);
     }
 
     finalizaJuegoXColision(intervaloColision){
-        let divAvatar = this.avatarJugador.getAvatar();
-        divAvatar.classList.remove('jugando');
-        divAvatar.classList.add('muerte');
+            let divAvatar = this.avatarJugador.getAvatar();
+            let divMensaje = document.getElementById('mensaje-juego-perdido');
+            let fondo = document.getElementById('parallax-background');
+            
+            divAvatar.classList.remove('jugando');
+            divAvatar.classList.add('muerte');
+            fondo.classList.remove('animacion-fondo'); 
+    
+            setTimeout(function () {
+                divAvatar.classList.remove('muerte');
+                divAvatar.remove();
+                clearInterval(intervaloColision);
+                console.log('muere pez');
+            }, 1000);
+    
+            this.jugando = false;
+            
+            setTimeout(function () {
+                divMensaje.classList.remove('oculto');
+            }, 2000);
+    }
 
-        setTimeout(function () {
-            divAvatar.classList.remove('muerte');
-            clearInterval(intervaloColision);
-            console.log('muere pez');
-        }, 1000);
+    incrementarPuntos(objeto){        
+        this.puntos += 5;
+        this.puntaje.innerHTML = this.getPuntos();
 
-        this.jugando = false;
-        //AGREGAR CARTEL DE GAME OVER
+        let divObjeto = objeto.getObjeto()
+        divObjeto.classList.remove('movimiento-ostra');
+        divObjeto.classList.add('desaparecer');
     }
 
     hayColision(avatar,objeto){
@@ -171,31 +234,36 @@ class Juego{
         return hayColision;
     }
 
-    incrementarPuntos(){
-        this.puntos += 5;
+    setTimerFinalizado(timerFinalizado){
+        this.timerFinalizado = timerFinalizado;
     }
 
-    eliminarObjeto(idObjeto){
-        this.intervalosObjetos[idObjeto] = setInterval(() => {
-            let objeto = this.objetos[idObjeto];
-            if(objeto) {
-                objeto.getObjeto().remove();
-                delete this.objetos[idObjeto];
-            }
-            clearInterval(this.intervalosObjetos[idObjeto]);
-        },7500);
-    }
+    initTimer() {
+		let minute = 2;
+		let sec = 0;
+        let ctxJuego = this;
+		var interval = setInterval(function () {
+			if(ctxJuego.estaJugando()){
+				document.getElementById("timer").classList.remove('oculto');
+				let secInfo = (sec < 10) ? '0'+sec : sec;
+				let minuteInfo = (minute < 10) ? '0'+minute : minute;
+				document.getElementById("timer").innerHTML = minuteInfo + ":" + secInfo;			
+				sec--;
+				if(sec < 0 && minute == 0){
+					ctxJuego.setTimerFinalizado(true);
+					clearInterval(interval);
+				} else {
+					if(sec < 0){
+						minute--;
+						sec = 59;
+					}
+				}
+			} else {
+				clearInterval(interval);
+			}
+		}, 1000);
+	}
+   
 
-    crearObjeto(){
-        let objetos = ['tiburon','aguaviva','ostra'];
-        let nombre = objetos[Math.floor(Math.random() * objetos.length)];
-        let posicionY = Math.random() * (this.limiteSuperior - this.limiteInferior) + this.limiteInferior;
-        let nuevoObjeto = new Objeto(this.limiteDerecho + 200,posicionY,nombre); // -5
-        let id = 'objeto' + this.contadorObjetosCreados;
-        this.contadorObjetosCreados++;
-        this.objetos[id] = nuevoObjeto; 
-        
-        return id;
-    }
-
+    
 }

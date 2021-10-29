@@ -41,10 +41,17 @@ class Juego{
     }
 
     initEventos(ctxJuego){
+        let avatar = this.avatarJugador;
+
         document.addEventListener("keydown", function (e) {
             console.log(e.key)
             ctxJuego.accionActual = e.key;
             ctxJuego.moverAvatar();
+        });
+
+        document.addEventListener("keyup", function (e) {
+            ctxJuego.accionActual = '';
+            avatar.eliminarMovimientoAvatar();
         });
 
     }
@@ -70,14 +77,6 @@ class Juego{
     }
 
     crearObjetos(){
-        /* let objetoTiburon = new Objeto(600,400,'tiburon');
-        let objetoAguaviva = new Objeto(800,200,'aguaviva');
-        let objetoOstra = new Objeto(1000,400,'ostra');
-
-        this.objetos.push(objetoTiburon);
-        this.objetos.push(objetoAguaviva);
-        this.objetos.push(objetoOstra); */
-
         let creacionObjeto = setInterval(() => {
             if(this.jugando){
                 let idObjeto = this.crearObjeto();            
@@ -139,41 +138,76 @@ class Juego{
             } else {
                 //termino timer
                 //finaliza juego por que gano
-            }
-           
+                this.finalizaJuegoGanado(intervaloColision);
+            }           
         }, 1000);
     }
 
+    finalizaJuegoGanado(intervaloColision){
+        let divAvatar = this.avatarJugador.getAvatar();
+        let divMensaje = document.getElementById('mensaje-juego');
+        let fondo = document.getElementById('parallax-background');
+        let mensajeGanador = document.getElementById('mensaje-ganador');
+
+        divAvatar.classList.remove('jugando');
+        divAvatar.classList.remove('subiendo');
+        divAvatar.classList.remove('bajando');
+        fondo.classList.remove('animacion-fondo'); 
+
+        divAvatar.remove();
+        clearInterval(intervaloColision);
+
+        this.jugando = false;
+        
+        divMensaje.classList.remove('oculto');
+        mensajeGanador.classList.remove('oculto');        
+    }
+
     finalizaJuegoXColision(intervaloColision){
-            let divAvatar = this.avatarJugador.getAvatar();
-            let divMensaje = document.getElementById('mensaje-juego-perdido');
-            let fondo = document.getElementById('parallax-background');
-            
-            divAvatar.classList.remove('jugando');
-            divAvatar.classList.add('muerte');
-            fondo.classList.remove('animacion-fondo'); 
-    
-            setTimeout(function () {
-                divAvatar.classList.remove('muerte');
-                divAvatar.remove();
-                clearInterval(intervaloColision);
-                console.log('muere pez');
-            }, 1000);
-    
-            this.jugando = false;
-            
-            setTimeout(function () {
-                divMensaje.classList.remove('oculto');
-            }, 2000);
+        let divAvatar = this.avatarJugador.getAvatar();
+        let divMensaje = document.getElementById('mensaje-juego');
+        let fondo = document.getElementById('parallax-background');
+        let mensajePerdedor = document.getElementById('mensaje-perdedor');
+        
+        divAvatar.classList.remove('jugando');
+        divAvatar.classList.remove('subiendo');
+        divAvatar.classList.remove('bajando');
+        divAvatar.classList.add('muerte');
+        fondo.classList.remove('animacion-fondo'); 
+
+        setTimeout(function () {
+            divAvatar.classList.remove('muerte');
+            divAvatar.remove();
+            clearInterval(intervaloColision);
+            console.log('muere pez');
+        }, 1000);
+
+        this.jugando = false;
+        
+        divMensaje.classList.remove('oculto');
+        mensajePerdedor.classList.remove('oculto');
     }
 
     incrementarPuntos(objeto){        
         this.puntos += 5;
         this.puntaje.innerHTML = this.getPuntos();
 
-        let divObjeto = objeto.getObjeto()
+        let posicionJugador = this.avatarJugador.getPosicionAvatar();
+        objeto.setPosX(posicionJugador.posX);
+        objeto.setPosY(posicionJugador.posY);
+        objeto.setPosicionObjeto();
+
+        let divObjeto = objeto.getObjeto();
+        
         divObjeto.classList.remove('movimiento-ostra');
         divObjeto.classList.add('desaparecer');
+
+        setTimeout(() => {
+            divObjeto.classList.add('oculto');
+            objeto.setPosX(-1500);
+            objeto.setPosY(-1500);
+            objeto.setPosicionObjeto();
+        }, 500);
     }
 
     hayColision(avatar,objeto){
@@ -239,10 +273,10 @@ class Juego{
     }
 
     initTimer() {
-		let minute = 2;
-		let sec = 0;
+		let minute = 1;
+		let sec = 59;
         let ctxJuego = this;
-		var interval = setInterval(function () {
+		let interval = setInterval(function () {
 			if(ctxJuego.estaJugando()){
 				document.getElementById("timer").classList.remove('oculto');
 				let secInfo = (sec < 10) ? '0'+sec : sec;
@@ -254,6 +288,7 @@ class Juego{
 					clearInterval(interval);
 				} else {
 					if(sec < 0){
+                        ctxJuego.aumentarDificultad();
 						minute--;
 						sec = 59;
 					}
@@ -264,6 +299,9 @@ class Juego{
 		}, 1000);
 	}
    
+    aumentarDificultad() {
+        this.crearObjetos();
+    }
 
     
 }

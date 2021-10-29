@@ -13,12 +13,22 @@ class Avatar {
     }
 
     moverVertical(direccion){                  
-        if (direccion === "ArrowUp") 
+        if (direccion === "ArrowUp") {
+            this.avatar.classList.add('subiendo');
             this.posY += this.movimientoJugador;
-        else if(direccion === "ArrowDown")
+        }
+        else if(direccion === "ArrowDown"){
+            this.avatar.classList.add('bajando');
             this.posY -= this.movimientoJugador;
+        }
         this.setPosicionAvatar();
     }
+
+    eliminarMovimientoAvatar(){
+        this.avatar.classList.remove('subiendo');
+        this.avatar.classList.remove('bajando');
+        //this.nave.classList.add('jugando');
+    } 
 
     moverHorizontal(direccion){
         if(direccion === "ArrowLeft")
@@ -61,7 +71,7 @@ class Avatar {
 
     getDimensiones(){
         return {
-            'width': 100/2,
+            'width': 120/2,
             'height': 60/2
         };
     }

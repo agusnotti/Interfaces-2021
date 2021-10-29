@@ -1,54 +1,11 @@
-/* FONDO */
-#parallax-background{
-    background-image: url(../images/oceano.jpg);
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-repeat: repeat-x;
-    background-size: cover;
-    /* animation: parallax-background linear 20s infinite; */
-    position: absolute;
-    overflow: hidden;
-}
-
-.animacion-fondo{
-    animation: parallax-background linear 20s infinite;
-}
-
-
 @keyframes parallax-background {
     0% {background-position-x: 0px;}
-    100% {background-position-x: -2694px;}
-}
-
-/* PEZ */
-#avatar{
-    position: absolute;
-    z-index: 2;
-    /* bottom: 150px;
-    left: 200px; */
-}
-
-.jugando {
-    width: 128px;
-    height: 128px;
-    background-image: url(../images/swin.png);
-    animation: pez steps(6) 1s infinite;
+    100% {background-position-x: -2729px;}
 }
 
 @keyframes pez{
     0% {background-position-x: 0px;}
     100% {background-position-x: 768px;}
-}
-
-.muerte{
-    background-image: url(../images/bubles2.png);
-    width: 126px;
-    height: 103px;
-    /* bottom: 200px;
-    left: 500px;  */
-    animation: muerte steps(7) 1s 1;
 }
 
 @keyframes muerte{
@@ -59,58 +16,14 @@
     }    
 }
 
-.tiburon{
-    background-image: url(../images/tiburon2.png);
-    position: absolute;
-    width: 235px;
-    height: 125px;
-    /* bottom: 400px;
-    left: 600px; */
-    /* animation: tiburon steps(7) 1s infinite, moverObjeto linear 6s 1; */
-}
-
-.movimiento-tiburon{
-    animation: tiburon steps(7) 1s infinite, moverObjeto linear 4s 1;
-}
-
 @keyframes tiburon{
     0% {background-position-x: 0px;}
     100% {background-position-x: 1641px;}
 }
 
-.aguaviva{
-    background-image: url(../images/jellyfish2.png);
-    position: absolute;
-    width: 133px;
-    height: 130px;
-    /* bottom: 200px;
-    left: 800px */;
-    /*animation: aguaviva steps(5) 2s infinite, moverObjeto linear 6s 1;*/
-}
-
-.movimiento-aguaviva{
-    animation: aguaviva steps(5) 2s infinite, moverObjeto linear 4s 1;
-}
-
 @keyframes aguaviva{
     0% {background-position-x: 0px;}
     100% {background-position-x: 664px;}
-}
-
-/* objeto para sumar puntos*/
-.ostra{
-    background-image: url(../images/puntos2.png);
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    /* bottom: 400px;
-    left: 1000px; 
-    animation: latir linear 2s infinite, moverObjeto linear 6s 1;*/
-    
-} 
-
-.movimiento-ostra{
-    animation: latir linear 2s infinite, moverObjeto linear 4s 1;
 }
 
 @keyframes latir{
@@ -119,26 +32,17 @@
     100% {transform: scale(0.7);}  
 }
 
-.desaparecer{
-    animation: desaparecer linear .5s 1;
-}
-
 @keyframes desaparecer{
-    from {
+    /* from {
         opacity: 1;
     }    
     to {
         opacity: 0;
         transform: translate3d(0, -2000px, 0);
-        transform: translate3d(0, -2000px, 0);
-    }
-}
+    } */
 
-.puntaje{
-    display: flex;
-    justify-content: space-between;
+    100% {transform: translate3d(0, -2000px, 0);}
 }
-
 
 @keyframes moverObjeto{
     100%{
@@ -146,7 +50,109 @@
     }
 }
 
-.mensaje-juego-perdido img{    
+@keyframes aparecer {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+  
+    50% {
+      transform: scale3d(1.05, 1.05, 1.05);
+    }
+  
+    to {
+      transform: scale3d(1, 1, 1);
+    }
+}
+
+/* FONDO */
+#parallax-background{
+    background-image: url(../images/oceano.jpg);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-repeat: repeat-x;
+    background-size: cover;
+    position: absolute;
+    overflow: hidden;
+}
+
+/* PEZ */
+#avatar{
+    position: absolute;
+    z-index: 2;
+}
+
+.animacion-fondo{
+    animation: parallax-background linear 20s infinite;
+}
+
+.jugando {
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/swin.png);
+    animation: pez steps(6) 1s infinite;
+}
+
+.subiendo{
+    transform: rotate(-10deg);
+}
+
+.bajando{
+    transform: rotate(10deg);
+}
+
+.movimiento-tiburon{
+    animation: tiburon steps(7) 1s infinite, moverObjeto linear 4s 1;
+}
+
+.movimiento-aguaviva{
+    animation: aguaviva steps(5) 2s infinite, moverObjeto linear 4s 1;
+}
+
+.movimiento-ostra{
+    animation: latir linear 2s infinite, moverObjeto linear 4s 1;
+}
+
+.desaparecer{
+    animation: desaparecer linear .5s 1;
+}
+
+.muerte{
+    background-image: url(../images/bubles2.png);
+    width: 126px;
+    height: 103px;
+    animation: muerte steps(7) 1s 1;
+}
+
+/* objeto para sumar puntos*/
+.ostra{
+    background-image: url(../images/puntos2.png);
+    position: absolute;
+    width: 50px;
+    height: 50px;    
+} 
+
+.aguaviva{
+    background-image: url(../images/jellyfish2.png);
+    position: absolute;
+    width: 133px;
+    height: 130px;
+}
+
+.tiburon{
+    background-image: url(../images/tiburon2.png);
+    position: absolute;
+    width: 235px;
+    height: 125px;
+}
+
+.puntaje{
+    display: flex;
+    justify-content: space-between;
+}
+
+.mensaje-juego img{    
     width: 60%;
     padding: 40px;    
 } 
@@ -185,20 +191,6 @@
 
 .mensaje-controles p{
     color: white;
-}
-
-@keyframes aparecer {
-    from {
-      transform: scale3d(1, 1, 1);
-    }
-  
-    50% {
-      transform: scale3d(1.05, 1.05, 1.05);
-    }
-  
-    to {
-      transform: scale3d(1, 1, 1);
-    }
 }
  
 .oculto{

@@ -20,6 +20,14 @@ class Objeto {
         objeto.style.bottom = this.posY+'px';
     }
 
+    setPosX(posX) {
+        this.posX = posX;
+    }
+
+    setPosY(posY) {
+        this.posY = posY;
+    }
+
     getPosicionObjeto(){
         return {
             'posX': this.getObjeto().getBoundingClientRect().x,

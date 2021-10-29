@@ -117,7 +117,7 @@ class Juego{
 
     verificarColision(){ 
         let intervaloColision = setInterval(() => {
-            if(!this.timerFinalizado) { // si no termino el timer
+            if(!this.timerFinalizado) {
                 for (let idObjeto in this.objetos) {
                     let objeto = this.objetos[idObjeto];
                     let hayColision = this.hayColision(this.avatarJugador,objeto);
@@ -136,8 +136,6 @@ class Juego{
                     }
                 }
             } else {
-                //termino timer
-                //finaliza juego por que gano
                 this.finalizaJuegoGanado(intervaloColision);
             }           
         }, 1000);

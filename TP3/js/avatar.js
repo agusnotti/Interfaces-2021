@@ -27,7 +27,6 @@ class Avatar {
     eliminarMovimientoAvatar(){
         this.avatar.classList.remove('subiendo');
         this.avatar.classList.remove('bajando');
-        //this.nave.classList.add('jugando');
     } 
 
     moverHorizontal(direccion){

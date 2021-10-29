@@ -1,7 +1,12 @@
 @keyframes parallax-background {
     0% {background-position-x: 0px;}
-    100% {background-position-x: -2729px;}
+    100% {background-position-x: -1870px;}
 }
+/* 
+@keyframes parallax-background-noche {
+    0% {background-position-x: 0px;}
+    100% {background-position-x: -2729px;}
+} */
 
 @keyframes pez{
     0% {background-position-x: 0px;}
@@ -66,7 +71,7 @@
 
 /* FONDO */
 #parallax-background{
-    background-image: url(../images/oceano.jpg);
+    background-image: url(../images/oceano2.jpg);
     width: 100%;
     height: 100%;
     top: 0;

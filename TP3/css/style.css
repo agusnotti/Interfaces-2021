@@ -71,7 +71,6 @@
 
 /* FONDO */
 #parallax-background{
-    background-image: url(../images/oceano2.jpg);
     width: 100%;
     height: 100%;
     top: 0;
@@ -80,6 +79,14 @@
     background-size: cover;
     position: absolute;
     overflow: hidden;
+}
+
+.fondo-dia {
+    background-image: url(../images/fondo-dia.jpg);
+}
+
+.fondo-noche{
+    background-image: url(../images/fondo-noche.jpg);
 }
 
 /* PEZ */
@@ -191,10 +198,11 @@
 }
 
 #inicio div{
-    padding: 10px;
+    padding: 5px;
 }
 
-.mensaje-controles p{
+.mensaje-controles p, #inicio p{
+    margin-top: 10px;
     color: white;
 }
  
@@ -215,4 +223,20 @@
 
 .timer-container{
     margin-right: 1%;
+}
+
+#fondo-dia, #fondo-noche{
+    width: 45%;
+    margin: 10px;
+;
+}
+
+.container-fondos{
+    display: flex;
+    justify-content: center;
+}
+
+.active{
+    border: 5px solid white;
+    width: 50%;
 }

@@ -41,18 +41,18 @@ class Objeto {
         let height = 0;
 
         if(this.nombre == 'tiburon'){
-            width = 235-80;
+            width = 150;
             height = 125;
         }
 
         if(this.nombre == 'aguaviva'){
-            width = 133-20;
+            width = 133;
             height = 140;
         }
 
         if(this.nombre == 'ostra'){
-            width = 100;
-            height = 100;
+            width = 120;
+            height = 120;
         }
 
         return {

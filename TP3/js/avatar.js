@@ -49,8 +49,6 @@ class Avatar {
         let avatar = document.getElementById('avatar');
         avatar.style.left = this.posX+'px';
         avatar.style.bottom = this.posY+'px';
-        console.log(this.posX);
-        console.log(this.posY);
     }
 
     getAvatar(){
@@ -60,7 +58,7 @@ class Avatar {
     getPosicionAvatar(){
         return {
             'posX': this.getAvatar().getBoundingClientRect().x,
-            'posY': this.posY 
+            'posY': this.posY
         };
     }
 
@@ -71,7 +69,7 @@ class Avatar {
     getDimensiones(){
         return {
             'width': 120/2,
-            'height': 60/2
+            'height': 120/2
         };
     }
 }

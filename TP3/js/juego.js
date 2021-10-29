@@ -44,7 +44,6 @@ class Juego{
         let avatar = this.avatarJugador;
 
         document.addEventListener("keydown", function (e) {
-            console.log(e.key)
             ctxJuego.accionActual = e.key;
             ctxJuego.moverAvatar();
         });
@@ -53,12 +52,12 @@ class Juego{
             ctxJuego.accionActual = '';
             avatar.eliminarMovimientoAvatar();
         });
-
     }
 
     moverAvatar(){
         if(this.acciones.includes(this.accionActual) && this.puedeMover()){
-            this.avatarJugador.moverAvatar(this.accionActual)
+            this.avatarJugador.moverAvatar(this.accionActual);
+            this.verificarColision(true);
         }
     }
 
@@ -115,29 +114,27 @@ class Juego{
         return id;
     }
 
-    verificarColision(){ 
+    verificarColision(hayMovimiento = false){ 
         let intervaloColision = setInterval(() => {
             if(!this.timerFinalizado) {
                 for (let idObjeto in this.objetos) {
                     let objeto = this.objetos[idObjeto];
                     let hayColision = this.hayColision(this.avatarJugador,objeto);
                     if(hayColision){
-                        console.log('hay colision con '+objeto.getNombre());
                         if(objeto.getNombre() == 'ostra'){
-    
-                            console.log('suma puntos');
                             this.incrementarPuntos(objeto);
-                            
-                            console.log(this.puntaje);
-                        } else {
-                            
+                        } else {                            
                             this.finalizaJuegoXColision(intervaloColision);
                         }
                     }
                 }
             } else {
                 this.finalizaJuegoGanado(intervaloColision);
-            }           
+            }    
+            
+            if(hayMovimiento) {
+                clearInterval(intervaloColision);
+            }
         }, 1000);
     }
 
@@ -177,7 +174,6 @@ class Juego{
             divAvatar.classList.remove('muerte');
             divAvatar.remove();
             clearInterval(intervaloColision);
-            console.log('muere pez');
         }, 1000);
 
         this.jugando = false;
@@ -210,10 +206,18 @@ class Juego{
 
     hayColision(avatar,objeto){
         let hayColision = false;
-        let posicionAvatar = avatar.getPosicionAvatar();
-        let posicionObjeto = objeto.getPosicionObjeto();
         let dimensionAvatar = avatar.getDimensiones();
         let dimensionesObjeto = objeto.getDimensiones();
+
+        let posicionAvatar = {
+            'posX' : avatar.getAvatar().getBoundingClientRect().left,
+            'posY' : avatar.getAvatar().getBoundingClientRect().top
+        }
+
+        let posicionObjeto = {
+            'posX' : objeto.getObjeto().getBoundingClientRect().left,
+            'posY' : objeto.getObjeto().getBoundingClientRect().top
+        }
 
         if(this.hayColisionEnX(posicionAvatar.posX, dimensionAvatar.width,posicionObjeto.posX, dimensionesObjeto.width) 
         && this.hayColisionEnY(posicionAvatar.posY, dimensionAvatar.height,posicionObjeto.posY, dimensionesObjeto.height)){
@@ -232,7 +236,6 @@ class Juego{
         let margenObsI = posXObjeto - widthObjeto;
         let margenObsD = posXObjeto + widthObjeto;
 
-
         if(margenObsI < margenI && margenI < margenObsD) {
             hayColision = true;
         }
@@ -246,14 +249,12 @@ class Juego{
 
     hayColisionEnY(posYAvatar, heightAvatar, posYObjeto, heightObjeto){
         let hayColision = false;
-
         
         let margenS = posYAvatar - heightAvatar;
         let margenI = posYAvatar + heightAvatar;
 
         let margenObsS = posYObjeto - heightObjeto;
         let margenObsI = posYObjeto + heightObjeto;
-
 
         if(margenObsI > margenI && margenI > margenObsS) {
             hayColision = true;

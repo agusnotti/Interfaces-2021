@@ -64,8 +64,4 @@ class Objeto {
     getNombre(){
         return this.nombre;
     }
-
-
-
-
 }

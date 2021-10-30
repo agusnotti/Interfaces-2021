@@ -68,8 +68,8 @@ class Avatar {
 
     getDimensiones(){
         return {
-            'width': 120/2,
-            'height': 120/2
+            'width': 100/2,
+            'height': 100/2
         };
     }
 }

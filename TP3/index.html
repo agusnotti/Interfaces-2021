@@ -12,10 +12,15 @@
     
     <div class="container">
         <div id="parallax-background" class="fondo-dia">
+
            <div id="puntaje" class="puntaje oculto">
                <div class="puntaje-actual">
                     <img src="images/puntos2.png" alt="">
                     <p id="puntos">0</p>
+                </div>
+
+                <div>
+                    <p  id="mensaje-nivel" class="mensaje-nivel oculto"> </p>
                 </div>
       
                <div class="timer-container">
@@ -23,26 +28,28 @@
                 </div>
             </div>
 
-
             <div id="menu" class="row">
                 <div id="inicio" class="offset-md-3 col-md-6" >
                     <p>Elija el fondo para su juego:</p>
                     <div class="container-fondos">
-                        <img id="fondo-dia" src="images/fondo-dia.jpg" alt="Fondo oceano de dia">
+                        <img id="fondo-dia" class="active" src="images/fondo-dia.jpg" alt="Fondo oceano de dia">
                         <img id="fondo-noche" src="images/fondo-noche.jpg" alt="Fondo oceano de noche">
                     </div>
-                    <div class="mensaje-controles">
-                        <P>Para el movimiento del avatar utilice las flechas de direccion.</P>
-                    </div>
-                    <div class="controles">
-                        <img src="images/controles.png" alt="Controles del juego"> 
-                    </div>
                     <div >
-                        <button id="jugar" class="btn btn-warning">JUGAR</button>
+                        <button id="jugar" class="btn btn-warning fs-4">JUGAR</button>
+                    </div>
+                    <div class="comentario-juego ">
+                        <p>Comentarios sobre el juego:</p>
+                        <ul>
+                            <li>Para el movimiento del avatar utilice las flechas de direccion.</li>
+                            <li class="controles"><img src="images/controles.png" alt="Controles del juego"> </li>
+                            <li>El juego fue desarrollado y probado en Chrome.</li>
+                            <li>Las animaciones Keyframes sobre el avatar se pueden observar en el movimiento de nado (en linea recta) y cuando colision con alguno de los obstaculos (tibuton o aguaviva)</li>
+                        </ul>
+
                     </div>
                 </div>
-            </div>         
-
+            </div> 
 
             <div id="mensaje-juego" class="mensaje-juego oculto">
                 <img id="mensaje-perdedor" class="oculto" src="images/perdedor.png" alt="mensaje Juego Perdido">

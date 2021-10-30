@@ -2,11 +2,6 @@
     0% {background-position-x: 0px;}
     100% {background-position-x: -1870px;}
 }
-/* 
-@keyframes parallax-background-noche {
-    0% {background-position-x: 0px;}
-    100% {background-position-x: -2729px;}
-} */
 
 @keyframes pez{
     0% {background-position-x: 0px;}
@@ -38,14 +33,6 @@
 }
 
 @keyframes desaparecer{
-    /* from {
-        opacity: 1;
-    }    
-    to {
-        opacity: 0;
-        transform: translate3d(0, -2000px, 0);
-    } */
-
     100% {transform: translate3d(0, -2000px, 0);}
 }
 
@@ -69,7 +56,6 @@
     }
 }
 
-/* FONDO */
 #parallax-background{
     width: 100%;
     height: 100%;
@@ -89,7 +75,6 @@
     background-image: url(../images/fondo-noche.jpg);
 }
 
-/* PEZ */
 #avatar{
     position: absolute;
     z-index: 2;
@@ -137,7 +122,6 @@
     animation: muerte steps(7) 1s 1;
 }
 
-/* objeto para sumar puntos*/
 .ostra{
     background-image: url(../images/puntos2.png);
     position: absolute;
@@ -188,7 +172,7 @@
 }
 
 .controles img{
-    width: 50%;
+    width: 30%;
 }
 
 .controles, #inicio{
@@ -228,7 +212,6 @@
 #fondo-dia, #fondo-noche{
     width: 45%;
     margin: 10px;
-;
 }
 
 .container-fondos{
@@ -239,4 +222,13 @@
 .active{
     border: 5px solid white;
     width: 50%;
+}
+
+#jugar{
+    padding: 10px 50px;
+}
+
+.comentario-juego li{
+    font-size: 12px;
+    color: white;
 }

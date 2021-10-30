@@ -13,33 +13,46 @@ class Juego{
         this.puntos = 0;  
         this.contadorObjetosCreados = 0; 
         this.timerFinalizado = false;
+        this.nivel = 1;
 
         this.acciones = ['ArrowDown','ArrowUp','ArrowLeft','ArrowRight'];
         this.accionActual = '';
+        document.getElementById("timer").innerHTML = "02:00";
         
         this.iniciarJuego();
         
-    }
+    }    
 
-    estaJugando(){
-        return this.jugando;
-    }
-
-
+    /**
+     * Inicio la animacion del fondo.
+     * Realiza la llamada al metodo que captura los eventos de las teclas.
+     * Realiza la llamada al metodo que crea los objetos con los que interactua el avatar (obtsaculos y coleccionable)
+     * Realiza la llamada que verifica si se produce una colision.
+     * Realiza la llamada que da inicio a Timer del juego.
+     */
     iniciarJuego(){ 
         let fondo = document.getElementById('parallax-background');
+        let niveles = document.getElementById('mensaje-nivel');
+        niveles.innerHTML = "Nivel "+this.nivel;
         fondo.classList.add('animacion-fondo'); 
         this.puntaje.innerHTML = this.getPuntos();
+        niveles.classList.remove('oculto');
         this.initEventos(this);
         this.crearObjetos();
         this.verificarColision();
         this.initTimer();
     }
 
+    /**
+     * Obtiene los puntos del juego en curso.
+     */
     getPuntos(){
         return this.puntos;
     }
 
+    /**
+     * Captura los eventos al pretar las teclas de direccion
+     */
     initEventos(ctxJuego){
         let avatar = this.avatarJugador;
 
@@ -54,6 +67,9 @@ class Juego{
         });
     }
 
+    /**
+     * Acciona el movimiento del avatar dependiendo de las acciones determinadas (arriba, abajo, atras, adelante).
+     */
     moverAvatar(){
         if(this.acciones.includes(this.accionActual) && this.puedeMover()){
             this.avatarJugador.moverAvatar(this.accionActual);
@@ -61,6 +77,10 @@ class Juego{
         }
     }
 
+    /**
+     * Verifica que el avatar pueda realizar movimientos segun su posicion 
+     * dentro de los limites del area de juego establecidos.
+     */
     puedeMover(){
         let posicion = this.avatarJugador.getPosicionAvatar();
         let puedeMover = true;
@@ -75,6 +95,10 @@ class Juego{
         return puedeMover; 
     }
 
+    /**
+     * Realiza la llamada al metodo de creacion de los objetos con los que interactua el avatar a partir de un 
+     * intervalo de tiempo (cada dos segundos)
+     */
     crearObjetos(){
         let creacionObjeto = setInterval(() => {
             if(this.jugando){
@@ -86,6 +110,9 @@ class Juego{
         }, 2000);  
     }
 
+    /**
+     * Elimina un objeto segun su id, luego de salir de la pantalla
+     */
     eliminarObjeto(idObjeto){
         this.intervalosObjetos[idObjeto] = setInterval(() => {
             let objeto = this.objetos[idObjeto];
@@ -97,6 +124,14 @@ class Juego{
         },8000);
     }
 
+    /**
+     * Selecciona el objeto a crear de manera random.
+     * Establece una posicion random de ese objeto
+     * Crea el objeto
+     * Le asigna la clase con el movimiento acorde al objeto
+     * Lo agrega a un arreglo de objetos.
+     * Le asigna y retorna el id para identificar al objeto creado
+     */
     crearObjeto(){
         let objetos = ['tiburon','aguaviva','ostra'];
         let nombre = objetos[Math.floor(Math.random() * objetos.length)];
@@ -114,6 +149,11 @@ class Juego{
         return id;
     }
 
+    /**
+     * Lleva a cabo las acciones correspondientes (muerte del avatar o sumar puntos), 
+     * dependiendo si se produce colision con un objeto obtaculo (tiburon o aguaviva) 
+     * o un objeto coleccionable (ostra)
+     */
     verificarColision(hayMovimiento = false){ 
         let intervaloColision = setInterval(() => {
             if(!this.timerFinalizado) {
@@ -138,6 +178,9 @@ class Juego{
         }, 1000);
     }
 
+    /**
+     * Lleva a cabo las acciones cuando finaliza el Timer, dando el juego como ganado.
+     */
     finalizaJuegoGanado(intervaloColision){
         let divAvatar = this.avatarJugador.getAvatar();
         let divMensaje = document.getElementById('mensaje-juego');
@@ -158,6 +201,10 @@ class Juego{
         mensajeGanador.classList.remove('oculto');        
     }
 
+    /**
+     * Lleva a cabo las acciones cuando se produce una colision entre el avatar y 
+     * uno de los objetos obstaculo (tiburon o aguaviva), dando el juego como perdido.
+     */
     finalizaJuegoXColision(intervaloColision){
         let divAvatar = this.avatarJugador.getAvatar();
         let divMensaje = document.getElementById('mensaje-juego');
@@ -182,6 +229,9 @@ class Juego{
         mensajePerdedor.classList.remove('oculto');
     }
 
+    /**
+     * Realiza el incremento del puntaje cuando el avatar colisiona con un objeto ostra.
+     */
     incrementarPuntos(objeto){        
         this.puntos += 5;
         this.puntaje.innerHTML = this.getPuntos();
@@ -204,6 +254,9 @@ class Juego{
         }, 500);
     }
 
+    /**
+     * Verifica si hay una colsion entre un objeto y el avatar
+     */
     hayColision(avatar,objeto){
         let hayColision = false;
         let dimensionAvatar = avatar.getDimensiones();
@@ -227,6 +280,10 @@ class Juego{
         return hayColision;
     }
 
+
+    /**
+     * Verifica si hay colision entre un objeto y el avatar en relacion al eje X
+     */
     hayColisionEnX(posXAvatar, widthAvatar, posXObjeto, widthObjeto){
         let hayColision = false;
 
@@ -247,6 +304,9 @@ class Juego{
         return hayColision;
     }
 
+    /**
+     * Verifica si hay colision entre un objeto y el avatar en relacion al eje Y
+     */
     hayColisionEnY(posYAvatar, heightAvatar, posYObjeto, heightObjeto){
         let hayColision = false;
         
@@ -267,10 +327,16 @@ class Juego{
         return hayColision;
     }
 
+    /**
+     * Setea el estado del timer.
+     */
     setTimerFinalizado(timerFinalizado){
         this.timerFinalizado = timerFinalizado;
     }
 
+    /**
+     * Implementacion del timer del juego.
+     */
     initTimer() {
 		let minute = 1;
 		let sec = 59;
@@ -290,6 +356,9 @@ class Juego{
                         ctxJuego.aumentarDificultad();
 						minute--;
 						sec = 59;
+                        let nivel = ctxJuego.getNivel();
+                        nivel++;
+                        document.getElementById('mensaje-nivel').innerHTML = "Nivel "+nivel;
 					}
 				}
 			} else {
@@ -297,9 +366,26 @@ class Juego{
 			}
 		}, 1000);
 	}
+
+    /**
+     * Obtiene el nivel del juego
+     */
+    getNivel(){
+        return this.nivel;
+    }
    
+    /**
+     * LLeva a cabo una nueva creacion de objetos, incrementando la dificultad del juego
+     */
     aumentarDificultad() {
         this.crearObjetos();
+    }
+
+    /**
+     * Verifica el estado del juego.
+     */
+    estaJugando(){
+        return this.jugando;
     }
 
     

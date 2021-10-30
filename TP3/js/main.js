@@ -1,14 +1,3 @@
-/**
- * JUEGO
- * 
- * clases
- * - avatar (pez)
- * - obstaculo (tiburon y aguaviva)
- * - items vida y puntos (ostras)
- * - juego
- * 
- */
-
 document.addEventListener("DOMContentLoaded", function(event) {
      
      let btnJugar = document.getElementById('jugar');
@@ -23,16 +12,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
      let imagenNoche = document.getElementById('fondo-noche');
      let fondo = document.getElementById('parallax-background');
      let juego;
-
-     /// agregar evento en radio on change (o algo asi)
-     // si es dia... agrego clase dia al parallax y saco noche
-     // si es noche.. agrego clase noche y remuevo dia
-     //ejemplo:
-     // let fondo = document.getElementById('parallax-background');
-     //fondo.classList.remove('dia');
-     //fondo.classList.add('noche');
-
-     //Revisar de agregar mensaje en cambio de level
 
      imagenDia.addEventListener('click', ()=>{
           imagenDia.classList.add('active');
@@ -69,3 +48,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
           menu.classList.remove('oculto');
      });
 })
+
+
+/**
+ * JUEGO
+ * 
+ * clases
+ * - avatar (pez)
+ * - obstaculo (tiburon y aguaviva)
+ * - items vida y puntos (ostras)
+ * - juego
+ * 
+ */
